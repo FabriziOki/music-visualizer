@@ -1,0 +1,10 @@
+# ;)
+CLAUDE.md
+
+# audio samples — drop your own mp3/wav files here, not tracked in git
+samples/
+
+# python
+__pycache__/
+*.pyc
+.venv/
