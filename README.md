@@ -39,7 +39,7 @@ This is the schema B outputs and C consumes. **Do not change field names without
 }
 ```
 
-> **Note:** Mood labels (`"euphoric"`, `"calm"`, `"aggresive"`, `"melancholic"`, `"tense"`) are defined by Person C and communicated to Person A for visual mapping.
+> **Note:** Mood labels (`"euphoric"`, `"calm"`, `"aggressive"`, `"melancholic"`, `"tense"`) are defined by Person C and communicated to Person A for visual mapping.
 
 ---
 
