@@ -64,7 +64,7 @@ This is the schema B outputs and C consumes. **Do not change field names without
 Install the package from the repo root, then import:
 
 ```bash
-pip install -e .
+uv sync
 ```
 
 ```python
