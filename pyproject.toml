@@ -9,11 +9,12 @@ dependencies = [
     "numpy>=1.26",
     "sounddevice>=0.4",
     "soundfile>=0.12",
-]
+
 
 # --- Person C: Classifier + API (add here) ---
-# "fastapi>=0.111",
-# "uvicorn[standard]>=0.29",
+ "fastapi>=0.111",
+ "uvicorn[standard]>=0.29",
+]
 # "scikit-learn>=1.4",
 
 [project.optional-dependencies]
