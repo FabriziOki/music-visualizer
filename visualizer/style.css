@@ -11,7 +11,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 16px;
+    gap: 20px;
 }
 
 .player {
@@ -64,10 +64,17 @@
     cursor: pointer;
 }
 
-input[type="file"] {
-    color: white;
-    font-size: 12px;
-    font-family: sans-serif;
+#audio-file{
+    cursor: pointer;
+    display: none;
+}
+
+#upload-btn {
+    cursor: pointer;
+    position: absolute;
+    left: 70px;  /* distance from left of playback */
+    width: 40px; /* size of the image */
+    height: 40px;
 }
 
 canvas {
