@@ -1,15 +1,10 @@
-h1{
-    text-align: center;
-    color: white;
-}
-
 .playback {
     position: fixed;
     bottom: 4%;
     left: 50%;
     transform: translateX(-50%);
     width: 70%;
-    background: rgba(0, 0, 0, 0.3);
+    background: rgba(236, 230, 230, 0.3);
     border-radius: 20px;
     backdrop-filter: blur(50px);
     padding: 20px;
@@ -31,19 +26,20 @@ h1{
     border: none;
     border-radius: 50%;
     width: 36px;
-    height: 40px;
+    height: 36px;
     cursor: pointer;
     font-size: 26px;
     display: flex;
     align-items: center;
     justify-content: center;
+    box-shadow: 0 4px #999;
 }
 
-#play-btn:hover {background-color: #cfe8d0}
+#play-btn:hover {background-color: #ffffff}
 
 #play-btn:active {
-  background-color: #b1dfb3;
-  box-shadow: 0 3px #b9b7b7;
+  background-color: #ffffff;
+  box-shadow: 0 2px #b9b7b7;
   transform: translateY(2px);
 }
 
