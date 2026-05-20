@@ -1,7 +1,82 @@
 h1{
-    text-align: center;;
+    text-align: center;
+    color: white;
 }
 
-audio{
-    align-self: end;
+.playback {
+    position: fixed;
+    bottom: 4%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 70%;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 20px;
+    backdrop-filter: blur(50px);
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 16px;
+}
+
+.player {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 80%;
+}
+
+#play-btn {
+    background: white;
+    border: none;
+    border-radius: 50%;
+    width: 36px;
+    height: 40px;
+    cursor: pointer;
+    font-size: 26px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#play-btn:hover {background-color: #cfe8d0}
+
+#play-btn:active {
+  background-color: #b1dfb3;
+  box-shadow: 0 3px #b9b7b7;
+  transform: translateY(2px);
+}
+
+#current-time, #duration {
+    color: white;
+    font-size: 12px;
+    font-family: sans-serif;
+    min-width: 35px;
+}
+
+#progress {
+    flex: 1;
+    height: 4px;
+    accent-color: white;
+    cursor: pointer;
+}
+
+#volume {
+    width: 80px;
+    height: 4px;
+    accent-color: white;
+    cursor: pointer;
+}
+
+input[type="file"] {
+    color: white;
+    font-size: 12px;
+    font-family: sans-serif;
+}
+
+canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: -1;
 }
