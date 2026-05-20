@@ -18,9 +18,9 @@ Audio File → [B: Feature Extraction] → [C: Mood Classifier + API] → [A: Vi
 
 | Person | Responsibility | Stack |
 |--------|---------------|-------|
-| **Violeta** | Frontend visualizer — canvas animations, mood-to-color/shape mapping, creative direction | p5.js |
-| **Fabrizio** | Audio engine — loads audio files, runs FFT and feature extraction, outputs feature dict | `librosa`, `numpy`, `sounddevice` |
-| **Carlos** | Classifier + integration — maps features to mood label, serves results via API | `FastAPI`, `scikit-learn` (optional) |
+| **A.Violeta** | Frontend visualizer — canvas animations, mood-to-color/shape mapping, creative direction | p5.js |
+| **B.Fabrizio** | Audio engine — loads audio files, runs FFT and feature extraction, outputs feature dict | `librosa`, `numpy`, `sounddevice` |
+| **C.Carlos** | Classifier + integration — maps features to mood label, serves results via API | `FastAPI`, `scikit-learn` (optional) |
 
 ---
 
