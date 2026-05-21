@@ -127,6 +127,7 @@ document.querySelector('#volume').addEventListener('input', (e) => {
 audioEl.addEventListener('loadedmetadata', () => {
     document.querySelector('#duration').textContent = formatTime(audioEl.duration)
     document.querySelector('#progress').max = audioEl.duration
+    document.querySelector('#play-btn').textContent = '▶'
 })
 
 audioEl.addEventListener('timeupdate', () => {
@@ -138,10 +139,12 @@ audioEl.addEventListener('ended', () => {
     audioEl.currentTime = 0
     document.querySelector('#progress'),value = '0:00'
     document.querySelector('#current-time').textContent = '0:00'
+    document.querySelector('#play-btn').textContent = '▶'
 })
 
 document.querySelector('#upload-btn').addEventListener('click', () => {
     document.querySelector('#audio-file').click()
+    document.querySelector('#play-btn').textContent = '▶'
 })
 
 document.querySelector('#progress').addEventListener('input', (e) => {
