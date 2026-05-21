@@ -1,133 +1,182 @@
-# 🎵 Music Mood Detector + Visualizer
+# Music Mood Visualizer
 
-A multimedia pipeline that analyzes an audio file, detects its emotional mood, and drives a real-time visual experience based on the result.
+A multimedia pipeline that analyzes an uploaded audio file, classifies its emotional mood using extracted acoustic features, and drives a real-time browser-based visualization synchronized to the music.
 
 ---
 
 ## Overview
 
-The system takes a music file as input, extracts audio features, classifies the mood, and maps it to colors and animations in an interactive visualizer.
+The system accepts a music file from the browser, sends it to a Python backend that extracts audio features and classifies the mood, and maps the result to a distinct color palette and animation style rendered on an HTML5 canvas using p5.js. Audio playback with full transport controls (play/pause, seek, volume) runs in parallel in the browser.
 
 ```
-Audio File → [B: Feature Extraction] → [C: Mood Classifier + API] → [A: Visualizer]
-```
-
----
-
-## Team Split
-
-| Person | Responsibility | Stack |
-|--------|---------------|-------|
-| **A.Violeta** | Frontend visualizer — canvas animations, mood-to-color/shape mapping, creative direction | p5.js |
-| **B.Fabrizio** | Audio engine — loads audio files, runs FFT and feature extraction, outputs feature dict | `librosa`, `numpy`, `sounddevice` |
-| **C.Carlos** | Classifier + integration — maps features to mood label, serves results via API | `FastAPI`, `scikit-learn` (optional) |
-
----
-
-## Feature Dictionary (Shared Contract)
-
-This is the schema B outputs and C consumes. **Do not change field names without notifying the team.**
-
-```python
-{
-  "bpm": 120.0,                 # Tempo in beats per minute
-  "energy": 0.75,               # RMS loudness, normalized 0–1
-  "valence": 0.6,               # Spectral brightness proxy (high = brighter/happier)
-  "danceability": 0.8,          # Beat regularity and strength
-  "spectral_centroid": 3200.0,  # Timbral sharpness in Hz
-  "zero_crossing_rate": 0.05    # Signal noisiness (helps separate calm vs chaotic)
-}
-```
-
-> **Note:** Mood labels (`"euphoric"`, `"calm"`, `"aggressive"`, `"melancholic"`, `"tense"`) are defined by Person C and communicated to Person A for visual mapping.
-
----
-
-## Getting Started
-
-> Each member can work independently once the feature dictionary above is agreed upon. Use hardcoded mock values of the schema to develop and test your component before integration.
-
-```
-# B: output a real feature dict from a test audio file
-# C: accept a hardcoded dict, return a mock mood label via the API
-# A: render visuals from a hardcoded mood label string
+User uploads audio file
+        │
+        ▼
+[FastAPI Backend]
+   ├── Audio Engine  → Feature Extraction (librosa)
+   └── Classifier    → Mood Label (rule-based)
+        │
+        ▼
+[Browser Frontend]
+   ├── p5.js Canvas  → Real-time frequency bar visualization
+   └── Web Audio API → Playback with transport controls
 ```
 
 ---
 
-## Integration Guide
+## Team
 
-### Person C — Using the Audio Module
+| Member | Responsibility | Technologies |
+|--------|---------------|--------------|
+| **Violeta** | Frontend visualizer — canvas animations, mood-to-color mapping, audio player UI | p5.js, Web Audio API, HTML/CSS |
+| **Fabrizio** | Audio engine — loads audio files, runs FFT and feature extraction | `librosa`, `numpy` |
+| **Carlos** | Classifier + API — rule-based mood classification, REST endpoint | `FastAPI`, `uvicorn` |
 
-**Option 1: Direct Python import (recommended)**
+---
 
-Install the package from the repo root, then import:
+## Tech Stack
+
+| Layer | Technology |
+|-------|-----------|
+| Backend language | Python 3.10+ |
+| Dependency management | `uv` + `pyproject.toml` |
+| Audio analysis | `librosa`, `numpy` |
+| API server | `FastAPI`, `uvicorn` |
+| Frontend rendering | p5.js (via CDN) |
+| Browser audio | Web Audio API (`AudioContext`, `AnalyserNode`) |
+
+---
+
+## Project Structure
+
+```
+music-mood-visualizer/
+├── audio/
+│   ├── __init__.py          # Public API: exports extract_features
+│   ├── __main__.py          # CLI runner: python -m audio <file>
+│   └── extractor.py         # Feature extraction using librosa
+├── classifier/
+│   ├── __init__.py
+│   ├── mood_classifier.py   # Rule-based mood classification logic
+│   ├── api.py               # FastAPI application with /classify endpoint
+│   └── test_classifier.py   # Unit tests for all five mood labels
+├── visualizer/
+│   ├── index.html           # UI: mood labels, file upload, audio player
+│   ├── sketch.js            # p5.js canvas + Web Audio API integration
+│   └── style.css            # Layout and styling
+├── samples/
+│   └── Love Takes Miles.mp3 # Sample audio file for testing
+├── pyproject.toml           # Project metadata and dependencies
+└── README.md
+```
+
+---
+
+## Setup and Running
+
+### Prerequisites
+
+- [uv](https://docs.astral.sh/uv/) installed
+
+### Install dependencies
 
 ```bash
 uv sync
 ```
 
-```python
-from audio import extract_features
+### Start the backend
 
-features = extract_features("path/to/song.mp3")
-# features is a plain dict — pass it straight into your classifier
-mood = classify(features)
+```bash
+uv run uvicorn classifier.api:app --reload
 ```
 
-Call `extract_features` inside your FastAPI route handler, passing whatever file path the user uploaded.
+The API will be available at `http://localhost:8000`.
 
-**Option 2: Subprocess (if environments are separate)**
+### Open the frontend
 
-```python
-import subprocess, json
-
-result = subprocess.run(
-    ["python", "-m", "audio", "path/to/song.mp3"],
-    capture_output=True, text=True, check=True
-)
-features = json.loads(result.stdout)
-```
-
-**Expected value ranges**
-
-| Field | Type | Range | Notes |
-|-------|------|-------|-------|
-| `bpm` | float | ~40–220 | Beats per minute, not normalized |
-| `energy` | float | 0–1 | RMS loudness; quiet tracks < 0.1, loud > 0.5 |
-| `valence` | float | 0–1 | Brightness proxy; bright/happy → high |
-| `danceability` | float | 0–1 | Beat consistency; chaotic → low |
-| `spectral_centroid` | float | ~500–8000 Hz | Raw Hz, not normalized |
-| `zero_crossing_rate` | float | ~0.01–0.15 | Higher = noisier/more chaotic |
-
-**Error handling**
-
-`extract_features` raises `FileNotFoundError` if the path doesn't exist, and a generic `Exception` for unsupported formats. Wrap it in a try/except in your route and return an appropriate HTTP error.
+Open `visualizer/index.html` directly in a browser (no build step required). Upload an audio file using the music note icon to begin.
 
 ---
 
-### Person A — Using the Mood Label
+## API Reference
 
-Person A does **not** interact with the audio module at all. The only output A consumes is the mood label string from C's API endpoint. No audio processing happens on the frontend.
+### `POST /classify`
 
-Mood labels C will return (for A to map visually):
+Accepts an audio file upload, extracts features, and returns the classified mood.
 
-| Label | Description |
-|-------|-------------|
-| `"euphoric"` | High energy, high valence |
-| `"calm"` | Low energy, low zero crossing rate |
-| `"aggressive"` | High energy, low valence, high BPM |
-| `"melancholic"` | Low energy, low valence |
-| `"tense"` | High zero crossing rate, mid energy |
+**Request:** `multipart/form-data` with a field named `file` (`.mp3` or `.wav`).
+
+**Response:**
+
+```json
+{
+  "mood": "euphoric",
+  "features": {
+    "bpm": 138.5,
+    "energy": 0.61,
+    "valence": 0.74,
+    "danceability": 0.82,
+    "spectral_centroid": 3412.0,
+    "zero_crossing_rate": 0.08
+  }
+}
+```
+
+### `GET /mock?mood=<label>`
+
+Returns a mock response without processing any audio. Useful for frontend development.
 
 ---
 
-## Project Structure (Proposed)
+## Extracted Features
 
+| Feature | Type | Range | Description |
+|---------|------|-------|-------------|
+| `bpm` | float | ~40–220 | Tempo in beats per minute |
+| `energy` | float | 0–1 | RMS loudness, normalized |
+| `valence` | float | 0–1 | Spectral brightness proxy (higher = brighter/happier) |
+| `danceability` | float | 0–1 | Beat regularity; low = chaotic, high = consistent |
+| `spectral_centroid` | float | ~500–8000 Hz | Average timbral sharpness in Hz |
+| `zero_crossing_rate` | float | ~0.01–0.15 | Signal noisiness; higher = more chaotic |
+
+---
+
+## Mood Classification
+
+Classification is rule-based, using threshold comparisons on the extracted features. Rules are evaluated in priority order:
+
+| Mood | Primary Rules |
+|------|---------------|
+| `aggressive` | BPM ≥ 150, or energy ≥ 0.25 and ZCR ≥ 0.06 |
+| `euphoric` | Spectral centroid ≥ 2800 Hz, ZCR ≥ 0.06, energy ≥ 0.20 |
+| `melancholic` | BPM < 90 and energy < 0.15 |
+| `tense` | BPM ≥ 120 and spectral centroid < 2000 Hz and ZCR < 0.05 |
+| `calm` | ZCR < 0.05, energy < 0.25, BPM < 150 |
+
+If no rule matches, the track defaults to `tense`.
+
+---
+
+## Visualization
+
+Each mood maps to a distinct color and bar-length scale rendered as radial frequency bars on a full-screen canvas. The bars react in real time to the frequency spectrum of the playing audio via the Web Audio API.
+
+| Mood | Color | Bar Length |
+|------|-------|-----------|
+| `euphoric` | Purple `(128, 0, 128)` | 230 px |
+| `calm` | Sea green `(46, 139, 87)` | 180 px |
+| `aggressive` | Crimson `(220, 20, 60)` | 300 px |
+| `melancholic` | Dodger blue `(30, 144, 255)` | 150 px |
+| `tense` | Sandy brown `(244, 164, 96)` | 260 px |
+
+Before a file is loaded, a slow-rotating white idle animation plays.
+
+---
+
+## Running Tests
+
+```bash
+uv run pytest classifier/test_classifier.py -v
 ```
-music-mood-visualizer/
-├── audio/          # B — feature extraction module
-├── classifier/     # C — mood rules + FastAPI server
-├── visualizer/     # A — p5.js frontend
-└── README.md
-```
+
+Tests cover all five mood labels with representative feature vectors.
