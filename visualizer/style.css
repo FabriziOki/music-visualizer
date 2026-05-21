@@ -1,3 +1,7 @@
+body{
+    font-family: 'Courier New', monospace;
+}
+
 .playback {
     position: fixed;
     bottom: 4%;
@@ -72,9 +76,119 @@
 #upload-btn {
     cursor: pointer;
     position: absolute;
-    left: 70px;  /* distance from left of playback */
-    width: 40px; /* size of the image */
+    left: 70px;  
+    width: 40px; 
     height: 40px;
+}
+
+.moods{
+    margin-top: 40px;
+    margin-left: 30px;
+    color: #ffffff;
+}
+
+#a, #m, #e, #t, #c{
+    background-color:rgb(186, 184, 184, 0.3);
+    width: 150px;
+    height: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px;
+    margin: 10px;
+    transform: perspective(1px) translateZ(0);
+    transition: color 0.3s;
+}
+
+#a:before{
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: -1;
+    background: rgb(220, 20, 60);
+    transform: scaleX(0);
+    transform-origin: 0 50%;
+    transition: transform 0.3s ease-out;
+    border-radius: 10px;
+}
+
+#a.active:before{
+    transform: scaleX(1);
+}
+
+#m:before{
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: -1;
+    transform: scaleX(0);
+    transform-origin: 0 50%;
+    transition: transform 0.3s ease-out;
+    border-radius: 10px;
+    background: rgb(30, 144, 255);
+}
+#m.active:before{
+    transform: scaleX(1);
+}
+
+#e:before{
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: -1;
+    transform: scaleX(0);
+    transform-origin: 0 50%;
+    transition: transform 0.3s ease-out;
+    border-radius: 10px;
+    background: rgb(128, 0, 128);
+}
+#e.active:before{
+    transform: scaleX(1);
+}
+
+#t:before{
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: -1;
+    transform: scaleX(0);
+    transform-origin: 0 50%;
+    transition: transform 0.3s ease-out;
+    border-radius: 10px;
+    background-color: rgb(244,164,96);
+}
+#t.active:before{
+    transform: scaleX(1);
+}
+
+#c::before{
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: -1;
+    transform: scaleX(0);
+    transform-origin: 0 50%;
+    transition: transform 0.3s ease-out;
+    border-radius: 10px;
+    background-color: rgb(46,139,87)
+}
+#c.active:before{
+    transform: scaleX(1);
 }
 
 canvas {

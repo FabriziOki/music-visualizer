@@ -5,7 +5,21 @@ let rotation = 0
 function setMood(m)
 {
     mood = m
+    
+    // remove active from all
+    document.querySelectorAll('.moods p').forEach(el => el.classList.remove('active'))
+    
+    // add active to the matching one
+    const map = {
+        aggressive: '#a',
+        melancholic: '#m',
+        tense: '#t',
+        calm: '#c',
+        euphoric: '#e'
+    }
+    document.querySelector(map[m]).classList.add('active')
 }
+
 function setEnergy(e)
 {
     energy = e
