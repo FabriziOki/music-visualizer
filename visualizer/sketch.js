@@ -174,3 +174,13 @@ document.querySelector('#audio-file').addEventListener('change', (e) => {
         setEnergy(data.features.energy)
     })
 })
+
+document.querySelector('#info-btn').addEventListener('click', () => {
+    document.querySelector('.overlay').style.display = 'block'
+})
+
+document.querySelector('.overlay').addEventListener('click', (e) => {
+    if (e.target === e.currentTarget) {
+        e.currentTarget.style.display = 'none';
+    }
+})
