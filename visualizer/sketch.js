@@ -34,7 +34,8 @@ function drawBars(inner, barLength, rotation = 0)
 {
     push()
 
-    translate(windowWidth / 2, windowHeight / 2)
+    translate((windowWidth / 2), (windowHeight / 2))
+    translate(0, -50)
     rotate(rotation)
     analyser.getByteFrequencyData(freqData)
 
@@ -102,7 +103,7 @@ function draw()
 const audioEl = new Audio()
 const audioContext = new AudioContext()
 const analyser = audioContext.createAnalyser()
-analyser.fftSize = 1024
+analyser.fftSize = 2048
 
 const source = audioContext.createMediaElementSource(audioEl)
 source.connect(analyser)

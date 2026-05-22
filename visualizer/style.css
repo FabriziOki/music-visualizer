@@ -39,29 +39,31 @@ body{
     box-shadow: 0 4px #999;
 }
 
-#play-btn:hover {background-color: #ffffff}
+#play-btn:hover{
+    background-color: #ffffff
+}
 
-#play-btn:active {
+#play-btn:active{
   background-color: #ffffff;
   box-shadow: 0 2px #b9b7b7;
   transform: translateY(2px);
 }
 
-#current-time, #duration {
+#current-time, #duration{
     color: white;
     font-size: 12px;
     font-family: sans-serif;
     min-width: 35px;
 }
 
-#progress {
+#progress{
     flex: 1;
     height: 4px;
     accent-color: white;
     cursor: pointer;
 }
 
-#volume {
+#volume{
     width: 80px;
     height: 4px;
     accent-color: white;
@@ -89,7 +91,7 @@ body{
     height: 40px;
 }
 
-.overlay {
+.overlay{
   display: none;
   position: fixed;
   top: 0; left: 0;
@@ -99,12 +101,30 @@ body{
 }
 
 .popup-content{
-    background: white;
-    width: 300px;
+    background: rgba(20, 20, 30, 0.95);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-left: 10px solid rgba(255, 255, 255, 0.482);
+    border-radius: 16px;
+    color: white;
+    width: 500px;
     margin: 15% auto;
-    padding: 20px;
-    border-radius: 8px;
-    text-align: center;
+    padding: 40px;
+    box-shadow: 0 0 40px rgba(128, 0, 128, 0.3);
+}
+
+#title{
+    font-size: 1.2em;
+    font-weight: 1000;
+    color: rgb(227, 240, 234);
+}
+
+#contributors{
+    font-size: 0.8em;
+    color: rgba(255, 255, 255, 0.5);
+    letter-spacing: 4px;
+    margin-top: 20px;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    padding-top: 12px;
 }
 
 .moods{
