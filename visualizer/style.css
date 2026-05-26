@@ -7,89 +7,89 @@ body{
     bottom: 4%;
     left: 50%;
     transform: translateX(-50%);
-    width: 70%;
-    background: rgba(236, 230, 230, 0.3);
+    width: 72%;
+    background: rgba(236, 230, 230, 0.18);
     border-radius: 20px;
     backdrop-filter: blur(50px);
-    padding: 20px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 20px;
-}
-
-.player {
+    -webkit-backdrop-filter: blur(50px);
+    padding: 14px 22px;
     display: flex;
     align-items: center;
     gap: 12px;
-    width: 80%;
+    /* smooth mood-colour tint transition */
+    transition: background 0.9s ease;
 }
 
-#play-btn {
-    background: white;
+/* ── Shared icon-button style ───────────────────────────────────────────────── */
+.ctrl-btn {
+    background: none;
     border: none;
-    border-radius: 50%;
-    width: 36px;
-    height: 36px;
+    color: rgba(255, 255, 255, 0.75);
     cursor: pointer;
-    font-size: 26px;
+    font-size: 15px;
+    padding: 7px 9px;
+    border-radius: 8px;
+    flex-shrink: 0;
+    transition: color 0.2s, background 0.2s;
+}
+.ctrl-btn:hover  { color: white; background: rgba(255,255,255,0.12); }
+.ctrl-btn:active { background: rgba(255,255,255,0.20); transform: translateY(1px); }
+
+/* Play/pause is the primary action — give it a filled circle */
+#play-btn {
+    background: rgba(255, 255, 255, 0.88);
+    color: rgba(0, 0, 0, 0.72);
+    border-radius: 50%;
+    width: 38px;
+    height: 38px;
+    padding: 0;
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 4px #999;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.25);
+}
+#play-btn:hover  { background: white; color: black; }
+#play-btn:active { transform: translateY(2px); box-shadow: 0 1px 5px rgba(0,0,0,0.25); }
+
+#current-time, #duration {
+    color: rgba(255, 255, 255, 0.75);
+    font-size: 11px;
+    font-family: 'Courier New', monospace;
+    min-width: 34px;
+    flex-shrink: 0;
 }
 
-#play-btn:hover{
-    background-color: #ffffff
-}
-
-#play-btn:active{
-  background-color: #ffffff;
-  box-shadow: 0 2px #b9b7b7;
-  transform: translateY(2px);
-}
-
-#current-time, #duration{
-    color: white;
-    font-size: 12px;
-    font-family: sans-serif;
-    min-width: 35px;
-}
-
-#progress{
+#progress {
     flex: 1;
     height: 4px;
     accent-color: white;
     cursor: pointer;
+    min-width: 0;
 }
 
-#volume{
-    width: 80px;
+#volume-icon {
+    color: rgba(255, 255, 255, 0.60);
+    font-size: 13px;
+    flex-shrink: 0;
+}
+
+#volume {
+    width: 72px;
     height: 4px;
     accent-color: white;
     cursor: pointer;
+    flex-shrink: 0;
 }
 
-#audio-file{
-    cursor: pointer;
-    display: none;
+#volume-pct {
+    color: rgba(255, 255, 255, 0.55);
+    font-size: 11px;
+    font-family: 'Courier New', monospace;
+    min-width: 32px;
+    flex-shrink: 0;
 }
 
-#upload-btn{
-    cursor: pointer;
-    position: absolute;
-    left: 70px;  
-    width: 40px; 
-    height: 40px;
-}
-
-#info-btn{
-    cursor: pointer;
-    position: absolute;
-    left: 95%;
-    width: 40px;
-    height: 40px;
-}
+#audio-file { display: none; }
 
 .overlay{
   display: none;
@@ -101,19 +101,21 @@ body{
 }
 
 .popup-content{
-    background: rgba(20, 20, 30, 0.95);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-left: 10px solid rgba(255, 255, 255, 0.482);
+    background: rgba(255, 255, 255, 0.07);
+    backdrop-filter: blur(40px);
+    -webkit-backdrop-filter: blur(40px);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-left: 6px solid rgba(255, 255, 255, 0.35);
     border-radius: 16px;
-    color: white;
+    color: rgba(255, 255, 255, 0.90);
     width: 500px;
     margin: 15% auto;
     padding: 40px;
-    box-shadow: 0 0 40px rgba(128, 0, 128, 0.3);
+    box-shadow: 0 8px 40px rgba(0, 0, 0, 0.35);
 }
 
 #title{
-    font-size: 1.2em;
+    font-size: 2.0em;
     font-weight: 1000;
     color: rgb(227, 240, 234);
 }
@@ -127,114 +129,92 @@ body{
     padding-top: 12px;
 }
 
-.moods{
-    margin-top: 40px;
-    margin-left: 30px;
-    color: #ffffff;
+/* ── Mood reel (vertical rolling queue) ────────────────────────────────────── */
+.mood-reel-container {
+    position: fixed;
+    left: 36px;
+    top: 50%;
+    transform: translateY(-50%);
+    height: 180px;          /* viewport: 3 visible slots */
+    overflow: hidden;
+    /* soft fade above and below to sell the reel illusion */
+    -webkit-mask-image: linear-gradient(to bottom,
+        transparent 0%, black 25%, black 75%, transparent 100%);
+    mask-image: linear-gradient(to bottom,
+        transparent 0%, black 25%, black 75%, transparent 100%);
 }
 
-#a, #m, #e, #t, #c{
-    background-color:rgb(186, 184, 184, 0.3);
-    width: 150px;
-    height: 30px;
+.mood-reel {
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    gap: 6px;
+    /* centre on index 0 (placeholder) on load:
+       translateY = 90 - (0*60 + 27) = 63px              */
+    transform: translateY(63px);
+    transition: transform 0.55s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.mood-item {
+    height: 54px;           /* 54px item + 6px gap = 60px step used in JS */
+    display: flex;
     align-items: center;
-    border-radius: 10px;
-    margin: 10px;
-    transform: perspective(1px) translateZ(0);
-    transition: color 0.3s;
+    justify-content: center;
+    padding: 0 18px;
+    border-radius: 14px;
+    /* glassmorphism */
+    background: rgba(255, 255, 255, 0.06);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    /* text */
+    color: rgba(255, 255, 255, 0.20);
+    font-size: 12px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    white-space: nowrap;
+    user-select: none;
+    transition:
+        color        0.45s ease,
+        font-size    0.45s ease,
+        letter-spacing 0.45s ease,
+        background   0.45s ease,
+        border-color 0.45s ease;
 }
 
-#a:before{
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    z-index: -1;
-    background: rgb(220, 20, 60);
-    transform: scaleX(0);
-    transform-origin: 0 50%;
-    transition: transform 0.3s ease-out;
-    border-radius: 10px;
+.mood-item.adjacent {
+    color: rgba(255, 255, 255, 0.45);
+    font-size: 13px;
+    background: rgba(255, 255, 255, 0.09);
+    border-color: rgba(255, 255, 255, 0.13);
 }
 
-#a.active:before{
-    transform: scaleX(1);
+.mood-item.active {
+    color: rgba(255, 255, 255, 0.95);
+    font-size: 17px;
+    letter-spacing: 4px;
+    font-weight: bold;
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.28);
 }
 
-#m:before{
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    z-index: -1;
-    transform: scaleX(0);
-    transform-origin: 0 50%;
-    transition: transform 0.3s ease-out;
-    border-radius: 10px;
-    background: rgb(30, 144, 255);
-}
-#m.active:before{
-    transform: scaleX(1);
-}
-
-#e:before{
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    z-index: -1;
-    transform: scaleX(0);
-    transform-origin: 0 50%;
-    transition: transform 0.3s ease-out;
-    border-radius: 10px;
-    background: rgb(128, 0, 128);
-}
-#e.active:before{
-    transform: scaleX(1);
-}
-
-#t:before{
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    z-index: -1;
-    transform: scaleX(0);
-    transform-origin: 0 50%;
-    transition: transform 0.3s ease-out;
-    border-radius: 10px;
-    background-color: rgb(244,164,96);
-}
-#t.active:before{
-    transform: scaleX(1);
-}
-
-#c:before{
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    z-index: -1;
-    transform: scaleX(0);
-    transform-origin: 0 50%;
-    transition: transform 0.3s ease-out;
-    border-radius: 10px;
-    background-color: rgb(46,139,87)
-}
-#c.active:before{
-    transform: scaleX(1);
+/* ── Track title ─────────────────────────────────────────────────────────────── */
+#track-title {
+    position: fixed;
+    top: 28px;
+    left: 50%;
+    transform: translateX(-50%);
+    margin: 0;
+    color: rgba(255, 255, 255, 0.55);
+    font-family: 'Courier New', monospace;
+    font-size: 20px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 60%;
+    pointer-events: none;
+    z-index: 10;
 }
 
 #bg-canvas {

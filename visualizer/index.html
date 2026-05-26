@@ -2,14 +2,13 @@
 <html lang="en">
 <head>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <title>Music Visualizer</title>
     <link rel="icon" type="image/x-icon" href="./images/icons8-musical-32.png">
 </head>
 <body>
     <canvas id="bg-canvas"></canvas>
-    <div class="info">
-        <img src="./images/icons8-i-64.png" id="info-btn">
-    </div>
+    <p id="track-title"></p>
     <div class="overlay">
         <div class="popup-content">
             <p id="title"><strong>How does it work?</strong>
@@ -22,23 +21,38 @@
             <p id="contributors"><i>work done by: oki · calos · vie</i></p>
         </div>
     </div>
-    <div class="moods">
-        <p id="a">Agressive</p>
-        <p id="m">Melancholic</p>
-        <p id="t">Tense</p>
-        <p id="c">Calm</p>
-        <p id="e">Euphoric</p>
+    <div class="mood-reel-container">
+        <div class="mood-reel">
+            <div class="mood-item active" id="none">Upload a song</div>
+            <div class="mood-item" id="a">Aggressive</div>
+            <div class="mood-item" id="m">Melancholic</div>
+            <div class="mood-item" id="t">Tense</div>
+            <div class="mood-item" id="c">Calm</div>
+            <div class="mood-item" id="e">Euphoric</div>
+        </div>
     </div>
     <div class="playback">
         <input type="file" accept="audio/*" id="audio-file">
-        <img src="./images/icons8-musical-note-64.png" id="upload-btn">
-        <div class="player">
-            <button id="play-btn">▶</button>
-            <span id="current-time">0:00</span>
-            <input type="range" id="progress" value="0" min="0" max="100">
-            <span id="duration">0:00</span>
-            <input type="range" id="volume" value="1" min="0" max="1" step="0.1">
-        </div>
+
+        <button class="ctrl-btn" id="upload-btn" title="Upload track">
+            <i class="fa-solid fa-music"></i>
+        </button>
+
+        <button class="ctrl-btn" id="play-btn" title="Play / Pause">
+            <i class="fa-solid fa-play" id="play-icon"></i>
+        </button>
+
+        <span id="current-time">0:00</span>
+        <input type="range" id="progress" value="0" min="0" max="100">
+        <span id="duration">0:00</span>
+
+        <i class="fa-solid fa-volume-high" id="volume-icon"></i>
+        <input type="range" id="volume" value="1" min="0" max="1" step="0.01">
+        <span id="volume-pct">100%</span>
+
+        <button class="ctrl-btn" id="info-btn" title="How it works">
+            <i class="fa-solid fa-circle-info"></i>
+        </button>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/p5@1.9.0/lib/p5.min.js"></script>
     <script src="background.js"></script>
