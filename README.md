@@ -27,7 +27,9 @@ User uploads audio file
 
 ## Demo
 
-![Music Mood Visualizer in action](output.gif)
+<p align="center">
+  <img src="output.gif" alt="Music Mood Visualizer in action" />
+</p>
 
 ---
 
