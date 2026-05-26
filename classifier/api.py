@@ -2,6 +2,7 @@ import os
 import tempfile
 from fastapi import FastAPI, HTTPException, UploadFile, File
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 from classifier.mood_classifier import classify_mood
 from audio.extractor import extract_features
 
@@ -33,3 +34,6 @@ async def classify(file: UploadFile = File(...)):
 @app.get("/mock")
 def mock(mood: str = "euphoric"):
     return {"mood": mood}
+
+
+app.mount("/", StaticFiles(directory="visualizer", html=True), name="static")

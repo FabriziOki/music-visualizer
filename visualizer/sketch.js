@@ -5,10 +5,10 @@ let rotation = 0
 function setMood(m)
 {
     mood = m
-    
+
     // remove active from all
     document.querySelectorAll('.moods p').forEach(el => el.classList.remove('active'))
-    
+
     // add active to the matching one
     const map = {
         aggressive: '#a',
@@ -18,6 +18,7 @@ function setMood(m)
         euphoric: '#e'
     }
     document.querySelector(map[m]).classList.add('active')
+    setBackgroundMood(m)
 }
 
 function setEnergy(e)
@@ -25,9 +26,10 @@ function setEnergy(e)
     energy = e
 }
 
-function setup() 
-{    
+function setup()
+{
     createCanvas(windowWidth, windowHeight);
+    initBackground();
 }
 
 function drawBars(inner, barLength, rotation = 0)
@@ -58,44 +60,40 @@ function drawBars(inner, barLength, rotation = 0)
     pop()
 }
 
-function draw() 
+function draw()
 {
+    clear()   // transparent each frame so the bg canvas shows through
+
     switch(mood){
         case "euphoric":
-            background('black')
             stroke(128, 0, 128)
             drawBars(100, 230)
             break;
 
         case "calm":
-            background('black')
             stroke(46, 139, 87)
-            drawBars(100,180)
+            drawBars(100, 180)
             break;
 
         case "aggressive":
-            background('black')
             stroke(220, 20, 60)
             drawBars(100, 300)
             break;
 
         case "melancholic":
-            background('black')
             stroke(30, 144, 255)
             drawBars(100, 150)
             break;
 
         case "tense":
-            background('black')
             stroke(244, 164, 96)
             drawBars(100, 260)
             break;
 
         default:
-            background('black')
-            stroke(255,255,255)
+            stroke(255, 255, 255)
             rotation += 0.004
-            drawBars(100,5, rotation)
+            drawBars(100, 5, rotation)
     }
 }
 
@@ -137,9 +135,16 @@ audioEl.addEventListener('timeupdate', () => {
 
 audioEl.addEventListener('ended', () => {
     audioEl.currentTime = 0
-    document.querySelector('#progress'),value = '0:00'
+    document.querySelector('#progress').value = 0
     document.querySelector('#current-time').textContent = '0:00'
     document.querySelector('#play-btn').textContent = '▶'
+})
+
+document.addEventListener('keydown', (e) => {
+    if (e.code === 'Space' && !['INPUT', 'BUTTON', 'TEXTAREA'].includes(e.target.tagName)) {
+        e.preventDefault()
+        document.querySelector('#play-btn').click()
+    }
 })
 
 document.querySelector('#upload-btn').addEventListener('click', () => {
