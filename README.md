@@ -25,13 +25,9 @@ User uploads audio file
 
 ---
 
-## Team
+## Demo
 
-| Member | Responsibility | Technologies |
-|--------|---------------|--------------|
-| **Violeta** | Frontend visualizer — canvas animations, mood-to-color mapping, audio player UI | p5.js, Web Audio API, HTML/CSS |
-| **Fabrizio** | Audio engine — loads audio files, runs FFT and feature extraction | `librosa`, `numpy` |
-| **Carlos** | Classifier + API — rule-based mood classification, REST endpoint | `FastAPI`, `uvicorn` |
+![Music Mood Visualizer in action](output.gif)
 
 ---
 

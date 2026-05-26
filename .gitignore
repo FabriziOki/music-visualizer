@@ -10,3 +10,6 @@ __pycache__/
 .venv/
 multimedia.venv/
 .vscode/
+combined.mp4
+list.txt
+palette.png
